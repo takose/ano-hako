@@ -2,3 +2,4 @@
 
 ## Member
 takose
+sector
