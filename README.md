@@ -4,3 +4,4 @@
 takose
 sector
 tateoka
+kuroki
