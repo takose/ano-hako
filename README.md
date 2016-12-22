@@ -1,5 +1,5 @@
 # Ano-hako
 
 ## Member
-tako
+takose
 sector
