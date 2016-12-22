@@ -4,4 +4,4 @@
 - takose
 - sector
 - tateoka
-- kuroki
+- Kuroki
