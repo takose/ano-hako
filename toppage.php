@@ -1,18 +1,19 @@
 <?php
 session_start();
-  $username["tateoka"] = "楯岡さん";
-  $username["takase"] = "高瀬さん";
-  $username["nakazato"] = "中里さん";
-  $username["kuroki"] = "黒木さん";
+$username["tateoka"] = "楯岡さん";
+$username["takase"] = "高瀬さん";
+$username["nakazato"] = "中里さん";
+$username["kuroki"] = "黒木さん";
 
 $pdo = new PDO("sqlite:anohako.sqlite");
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 //在庫の表示
 $st = $pdo->query("select * from product order by id desc");
-$data = $st->fetchAll();
+$product = $st->fetchAll();
 
-// $st = $pdo->query("select * from user where money =" .$username["name"] . ";");
-// $data3 = $st->fetchAll();
+$name = $_GET["name"];
+$st = $pdo->query("select money from user where name = '" . $name . "';");
+$money = $st->fetchAll();
 
 ?>
 
@@ -25,33 +26,32 @@ $data = $st->fetchAll();
   </head>
   <body>
     <pre>
-      <?php
-      if(isset($_GET["name"])){
-        $name = $_GET["name"];
-        print $username[$name]. "の所持金は";
+<?php
+if(isset($_GET["name"])){
+  //[0]なんとかする
+  print $username[$name] . "の所持金は" . $money[0]['money'];
 
-      // foreach($data3 as $meney){
-      //   print
-      // }
-    }
-
-      foreach($data as $product) {
-print '<div class="product">';
-print '<p>商品名:' .$product["name"] . '</p>';
-print '<p>値段:' . $product["price"] . '</p>';
-
-$st = $pdo->query("select * from zaiko where id =" .$product["id"] . ";");
-$data2 = $st->fetchAll();
-foreach($data2 as $zaiko) {
-print '<div class="zaiko">';
-print '<p>商品の数:'.$zaiko["number"].'</p>';
-print '<p>商品番号:'.$zaiko["priceid"].'</p>';
-print '</div>';
-print '</div>';
-print '----------------------------------------';
+  // foreach($data3 as $meney){
+  //   print
+  // }
 }
+?>
+<table>
+<?php
+foreach($product as $p) {
+  print '<tr>';
+  print '<th>商品名:' .$p["name"] . '</th>';
+  print '<th>値段:' . $p["price"] . '</th>';
+
+  $st = $pdo->query("select * from zaiko where id =" .$p["id"] . ";");
+  $stock = $st->fetchAll();
+  print '<td>商品の数:'.$stock[0]["number"].'</td>';
+  print '<td>商品番号:'.$stock[0]["priceid"].'</td>';
+  print '<td>購入</td>'
+  print '</tr>';
 }
-       ?>
+?>
+</table>
      </pre>
 
   </body>
