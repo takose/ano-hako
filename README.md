@@ -1,6 +1,7 @@
 # Ano-hako
 
 ## Member
-takose
-sector
-tateoka
+- takose
+- sector
+- tateoka
+- kuroki
