@@ -24,13 +24,12 @@ $st = $pdo->query("select price from product where name = '" . $Pname . "';");
 $price = $st->fetchAll();
 
 //$Pnumber = $stock[0]["number"];
-// $st = $pdo->query("select number from stock where id = '" . $Pid . "';");
+// $st = $pdo->query("select number from zaiko where id = '" . $Pid . "';");
 // $number = $st->fetchAll();
 
 $Uname = $_GET["username"];
 $st = $pdo->query("select money from user where name = '" . $Uname . "';");
 $money = $st->fetchAll();
-
 
 ?>
 <!DOCTYPE html>
@@ -42,6 +41,7 @@ $money = $st->fetchAll();
   </head>
   <body>
 
+<form action="userselect.php" method="get">
     <?php
     if(isset($_GET["productname"])){
       //残金の定義
@@ -50,10 +50,17 @@ $money = $st->fetchAll();
       print $productname[$Pname] . "を買いました。";
       print '<br>';
       print $username[$Uname] . "の所持金は" . $money[0]['money'] . "円になりました";
-      $st = $pdo->query("update user set money = " . $money[0]['money'] . " where name = '" . $Uname . "';");
-      //print $Pnumber;
-    }
-    ?>
-    <p class="article_link"><a href="toppage.html">トップページに戻る</a></p>
+
+      print '<input type="hidden" name="money"  value='. $money[0]["money"].' >';
+      print '<input type="hidden" name="number" value='.$_GET["number"].' >';
+      $_GET["number"] = $_GET["number"]-1;
+      print '<br>';
+      print  $productname[$Pname]. "の在庫は" .$_GET["number"] ."個となりました";
+  }
+      ?>
+
+　　<p class="article_link"><a href="userselect.php">トップページに戻る</a></p>
+</form>
+
   </body>
 </html>

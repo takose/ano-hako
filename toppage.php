@@ -11,8 +11,8 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 $st = $pdo->query("select * from product order by id desc");
 $product = $st->fetchAll();
 
-$user = $_GET["username"];
-$st = $pdo->query("select money from user where name = '" . $user . "';");
+$Uname = $_GET["username"];
+$st = $pdo->query("select money from user where name = '" . $Uname . "';");
 $money = $st->fetchAll();
 ?>
 
@@ -24,34 +24,45 @@ $money = $st->fetchAll();
 
   </head>
   <body>
+    <pre>
+<form action="shopping_submit.php" method="get">
       <?php
-        print $username[$user] . "の所持金は" . $money[0]['money']. "円です";
+
+
+
+      if(isset($_GET["username"])){
+
+        print $username[$Uname] . "の所持金は" . $money[0]['money']. "円です";
         print '<input type="hidden" name="username" value='.$_GET["username"].' >';
+     }
       ?>
-      <h3>商品を選択してください</h3>
-      <form action="shopping_submit.php" method="get">
-       <table>
-         <tr>
-           <th>drink</th>
-           <th>price</th>
-           <th>stock</th>
-           <th>No.</th>
-         </tr>
-         <?php
-         foreach($product as $p) {
-           print '<tr>';
-           print '<td><input type="radio" name="productname" value="'. $p["name"] .'">' . $p["name"] . '</th>';
-           print '<td>' . $p["price"] . '円</th>';
-           $st = $pdo->query("select * from stock where id =" .$p["id"] . ";");
-           $stock = $st->fetchAll();
-           print '<td>'.$stock[0]["number"].'個</td>';
-           print '<td>'.$stock[0]["product_id"].'</td>';
-           //print '<input type="hidden" name="number" value='.$stock[0]["number"].' >';
-           print '</tr>';
-         }
-         ?>
-        </table>
-        <input type="submit" value="購入">
-      </form>
+      <table>
+        <?php
+
+
+        foreach($product as $p) {
+          print '<tr>';
+          print '<th>' .$p["name"] . '</th>';
+          print '<th>値段:' . $p["price"] . '円</th>';
+          $st = $pdo->query("select * from zaiko where id =" .$p["id"] . ";");
+          $stock = $st->fetchAll();
+          print '<td>個数:'.$stock[0]["number"].'個</td>';
+          //print '<td>商品番号:'.$stock[0]["priceid"].'</td>';
+          print '<input type="hidden" name="number" value='. $stock[0]["number"].'>';
+          print '</tr>';
+        }
+        ?>
+
+     </table>
+     <form action="shopping_submit.php" method="get"> 商品を選択してください<br>
+             <input type="checkbox" name="productname" value="コーラ">コーラ
+             <input type="checkbox" name="productname" value="コーヒー">コーヒー
+             <input type="checkbox" name="productname" value="ファンタオレンジ">ファンタオレンジ
+             <input type="checkbox" name="productname" value="ファンタグレープ">ファンタグレープ
+             <input type="checkbox" name="productname" value="サイダー">サイダー
+             <input type="checkbox" name="productname" value="オレンジジュース">オレンジジュース
+<input type="submit" value="購入">
+</form>
+   </pre>
   </body>
 </html>
