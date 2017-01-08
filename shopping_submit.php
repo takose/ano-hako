@@ -24,7 +24,7 @@ $st = $pdo->query("select price from product where name = '" . $Pname . "';");
 $price = $st->fetchAll();
 
 //$Pnumber = $stock[0]["number"];
-// $st = $pdo->query("select number from zaiko where id = '" . $Pid . "';");
+// $st = $pdo->query("select number from stock where id = '" . $Pid . "';");
 // $number = $st->fetchAll();
 
 $Uname = $_GET["username"];
@@ -50,11 +50,10 @@ $money = $st->fetchAll();
       print $productname[$Pname] . "を買いました。";
       print '<br>';
       print $username[$Uname] . "の所持金は" . $money[0]['money'] . "円になりました";
+      $st = $pdo->query("update user set money = " . $money[0]['money'] . " where name = '" . $Uname . "';");
       //print $Pnumber;
-  }
-      ?>
-
-　　<p class="article_link"><a href="toppage.html">トップページに戻る</a></p>
-
+    }
+    ?>
+    <p class="article_link"><a href="toppage.html">トップページに戻る</a></p>
   </body>
 </html>
