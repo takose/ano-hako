@@ -24,34 +24,31 @@ $money = $st->fetchAll();
 
   </head>
   <body>
-    <?php
-      print $username[$user] . "の所持金は" . $money[0]['money']. "円です";
-    ?>
-     <h3>商品を選択してください</h3>
+    <h3>商品を選択してください</h3>
       <form action="shopping_submit.php" method="get">
-       <table>
-         <tr>
-           <th>drink</th>
-           <th>price</th>
-           <th>stock</th>
-           <th>No.</th>
-         </tr>
-         <?php
-         foreach($product as $p) {
-           print '<tr>';
-           print '<td><input type="radio" name="productname" value="'. $p["name"] .'">' . $p["name"] . '</th>';
-           print '<td>' . $p["price"] . '円</th>';
-           $st = $pdo->query("select * from stock where id =" .$p["id"] . ";");
-           $stock = $st->fetchAll();
-           print '<td>'.$stock[0]["number"].'個</td>';
-           print '<td>'.$stock[0]["product_id"].'</td>';
-           //print '<input type="hidden" name="number" value='.$stock[0]["number"].' >';
-           print '</tr>';
-         }
-         print '<input type="hidden" name="username" value='.$_GET["username"].' >';
-         ?>
-        </table>
-        <input type="submit" value="購入">
-      </form>
+        <table>
+          <tr>
+            <th>drink</th>
+            <th>price</th>
+            <th>stock</th>
+            <th>No.</th>
+          </tr>
+          <?php
+          foreach($product as $p) {
+            print '<tr>';
+            print '<td><input type="radio" name="productname" value="'. $p["name"] .'">' . $p["name"] . '</th>';
+            print '<td>' . $p["price"] . '円</th>';
+            $st = $pdo->query("select * from stock where id =" .$p["id"] . ";");
+            $stock = $st->fetchAll();
+            print '<td>'.$stock[0]["number"].'個</td>';
+            print '<td>'.$stock[0]["product_id"].'</td>';
+            //print '<input type="hidden" name="number" value='.$stock[0]["number"].' >';
+            print '</tr>';
+          }
+          print '<input type="hidden" name="username" value='.$_GET["username"].' >';
+          ?>
+       </table>
+       <input type="submit" value="購入">
+     </form>
   </body>
 </html>
