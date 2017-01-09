@@ -1,17 +1,14 @@
 <?php
-session_start();
-  $username["tateoka"] = "楯岡さん";
-  $username["takase"] = "高瀬さん";
-  $username["nakazato"] = "中里さん";
-  $username["kuroki"] = "黒木さん";
+require_once __DIR__ . '/functions.php';
+require_logined_session();
 
-$pdo = new PDO("sqlite:anohako.sqlite");
-$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+$pdo = new pdo("sqlite:anohako.sqlite");
+$pdo->setattribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 //在庫の表示
 $st = $pdo->query("select * from product order by id desc");
 $product = $st->fetchAll();
 
-$user = $_GET["username"];
+$user = $_SESSION['username'];
 $st = $pdo->query("select money from user where name = '" . $user . "';");
 $money = $st->fetchAll();
 ?>
@@ -25,6 +22,7 @@ $money = $st->fetchAll();
   </head>
   <body>
     <h3>商品を選択してください</h3>
+      <?php print $_SESSION['username'] . "の所持金は" . $money[0]['money']. "円です"; ?>
       <form action="shopping_submit.php" method="get">
         <table>
           <tr>
@@ -50,5 +48,6 @@ $money = $st->fetchAll();
        </table>
        <input type="submit" value="購入">
      </form>
+     <a href="/logout.php?token=<?=h(generate_token())?>">ログアウト</a>
   </body>
 </html>
