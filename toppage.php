@@ -1,12 +1,9 @@
 <?php
-session_start();
-  $username["tateoka"] = "楯岡さん";
-  $username["takase"] = "高瀬さん";
-  $username["nakazato"] = "中里さん";
-  $username["kuroki"] = "黒木さん";
+require_once __DIR__ . '/functions.php';
+require_logined_session();
 
-$pdo = new PDO("sqlite:anohako.sqlite");
-$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
+$pdo = new pdo("sqlite:anohako.sqlite");
+$pdo->setattribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 //在庫の表示
 $st = $pdo->query("select * from product order by id desc");
 $product = $st->fetchAll();
@@ -50,5 +47,6 @@ $money = $st->fetchAll();
        </table>
        <input type="submit" value="購入">
      </form>
+     <a href="/logout.php?token=<?=h(generate_token())?>">ログアウト</a>
   </body>
 </html>
