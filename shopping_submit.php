@@ -1,17 +1,6 @@
 <?php
-session_start();
-  $productname["コーラ"] = "コーラ";
-  $productname["コーヒー"] = "コーヒー";
-  $productname["ファンタオレンジ"] = "ファンタオレンジ";
-  $productname["ファンタグレープ"] = "ファンタグレープ";
-  $productname["サイダー"] = "サイダー";
-  $productname["オレンジジュース"] = "オレンジジュース";
-
-  $username["tateoka"] = "楯岡さん";
-  $username["takase"] = "高瀬さん";
-  $username["nakazato"] = "中里さん";
-  $username["kuroki"] = "黒木さん";
-
+require_once __DIR__ . '/functions.php';
+require_logined_session();
 
 $pdo = new PDO("sqlite:anohako.sqlite");
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
@@ -26,11 +15,11 @@ $product = $st->fetchAll();
 // $st = $pdo->query("select number from stock where id = '" . $Pid . "';");
 // $number = $st->fetchAll();
 
-$Uname = $_GET["username"];
-$st = $pdo->query("select money from user where name = '" . $Uname . "';");
+$username = $_SESSION['username'];
+$st = $pdo->query("select money from user where name = '" . $username . "';");
 $money = $st->fetchAll();
 
-$st = $pdo->query("select number from stock where product_id = '" . $product[0]["id"] . "';");
+$st = $pdo->query("select * from stock where product_id = '" . $product[0]['id'] . "';");
 $stock = $st->fetchAll();
 ?>
 <!DOCTYPE html>
@@ -41,30 +30,25 @@ $stock = $st->fetchAll();
 
   </head>
   <body>
-<?php
-print $stock[0]['number'];
-?>
 <form action="userselect.php" method="get">
     <?php
-    if(isset($_GET["productname"])){
       //残金の定義
       $money[0]['money'] = $money[0]['money'] - $product[0]['price'];
 
-      print $productname[$Pname] . "を買いました。";
+      print $product[0]['name'] . "を買いました。";
       print '<br>';
-      print $username[$Uname] . "の所持金は" . $money[0]['money'] . "円になりました";
-      $st = $pdo->query("update user set money = " . $money[0]['money'] . " where name = '" . $Uname . "';");
+      print $username . "の所持金は" . $money[0]['money'] . "円になりました";
+      $st = $pdo->query("update user set money = " . $money[0]['money'] . " where name = '" . $username . "';");
 
       print '<input type="hidden" name="money"  value='. $money[0]["money"].' >';
       print '<input type="hidden" name="number" value='.$_GET["number"].' >';
       print '<br>';
       $after_number = $stock[0]["number"]-1;
-      print  $productname[$Pname]. "の在庫は" . $after_number ."個となりました";
+      print  $product[0]['name']. "の在庫は" . $after_number ."個となりました";
       $st = $pdo->query("update stock set number = " . $after_number . " where product_id = '" . $product[0]["id"] . "';");
-  }
       ?>
 
-　　<p class="article_link"><a href="userselect.php">トップページに戻る</a></p>
+　　<p class="article_link"><a href="toppage.php">トップページに戻る</a></p>
 </form>
 
   </body>

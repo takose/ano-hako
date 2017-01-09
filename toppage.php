@@ -8,7 +8,7 @@ $pdo->setattribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 $st = $pdo->query("select * from product order by id desc");
 $product = $st->fetchAll();
 
-$user = $_GET["username"];
+$user = $_SESSION['username'];
 $st = $pdo->query("select money from user where name = '" . $user . "';");
 $money = $st->fetchAll();
 ?>
@@ -22,6 +22,7 @@ $money = $st->fetchAll();
   </head>
   <body>
     <h3>商品を選択してください</h3>
+      <?php print $_SESSION['username'] . "の所持金は" . $money[0]['money']. "円です"; ?>
       <form action="shopping_submit.php" method="get">
         <table>
           <tr>
