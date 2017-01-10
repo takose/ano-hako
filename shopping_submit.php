@@ -28,6 +28,7 @@ $stock = $st->fetchAll();
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/4.1.0/sanitize.min.css">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
     <link rel="stylesheet" href="./style.css">
     <script src="//code.jquery.com/jquery-2.0.0.min.js"></script>
     <title>My Blog - コメント登録</title>
@@ -42,7 +43,7 @@ $stock = $st->fetchAll();
       $money[0]['money'] = $money[0]['money'] - $product[0]['price'];
 
       print "Thanks!";
-      print '<br>';
+      print '<br><br>';
       print "残高:" . $money[0]['money'] . "円";
       $st = $pdo->query("update user set money = " . $money[0]['money'] . " where name = '" . $username . "';");
 
@@ -53,7 +54,7 @@ $stock = $st->fetchAll();
 ?>
     </div>
     <div class="blossom"></div>
-　　<div class="article_link"><a href="toppage.php" >buy more</a></div>
+    <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect article_link" type="button" onclick="location.href='toppage.php'"value="buy more">
   </div>
   <div id="server-id_data-provider" data-msg="<?=h($product[0]['id'])?>"></div>
   <div id="server-usr_data-provider" data-usr="<?=h($username)?>"></div>
