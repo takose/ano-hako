@@ -52,5 +52,59 @@ $stock = $st->fetchAll();
 　　<p class="article_link mes"><a href="toppage.php" >buy more</a></p>
     </form>
   </div>
+  <div id="server-data-provider" data-msg="<?=h($product[0]['id'])?>"></div>
   </body>
+  <script src="//cdn.rawgit.com/cidreixd/webmo-library-javascript/master/dist/webmo.min.js"></script>
+  <script>
+      
+    webmo1 = new Webmo.ws("webmo-cmp25-0.local")
+    webmo2 = new Webmo.ws("webmo-cmp25-1.local")
+    webmo3 = new Webmo.ws("webmo-cmp25-2.local")
+    const server_data = document.querySelector('#server-data-provider').dataset;
+    webmo1.onopen = function () {
+      if (server_data.msg == 1){
+        console.log("rotate")
+          webmo1.rotateBy(60,90)
+          setTimeout(function () {
+            webmo1.rotateBy(-60,90)
+          }, 2000)
+      } else if (server_data.msg == 2){
+        console.log("rotate")
+          webmo1.rotateBy(-60,90)
+          setTimeout(function () {
+            webmo1.rotateBy(60,90)
+          }, 2000)
+      } 
+    }
+    webmo2.onopen = function () {
+      if (server_data.msg == 3){
+        console.log("rotate")
+          webmo2.rotateBy(60,90)
+          setTimeout(function () {
+            webmo2.rotateBy(-60,90)
+          }, 2000)
+      } else if (server_data.msg == 4){
+        console.log("rotate")
+          webmo2.rotateBy(-60,90)
+          setTimeout(function () {
+            webmo2.rotateBy(60,90)
+          }, 2000)
+      } 
+    }
+    webmo3.onopen = function () {
+      if (server_data.msg == 5){
+        console.log("rotate")
+          webmo3.rotateBy(60,90)
+          setTimeout(function () {
+            webmo3.rotateBy(-60,90)
+          }, 2000)
+      } else if (server_data.msg == 6){
+        console.log("rotate")
+          webmo3.rotateBy(-60,90)
+          setTimeout(function () {
+            webmo3.rotateBy(60,90)
+          }, 2000)
+      } 
+    }
+  </script>
 </html>
