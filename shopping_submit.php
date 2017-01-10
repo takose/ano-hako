@@ -26,30 +26,85 @@ $stock = $st->fetchAll();
 <html lang="ja">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/4.1.0/sanitize.min.css">
+    <link rel="stylesheet" href="./style.css">
     <title>My Blog - コメント登録</title>
 
   </head>
   <body>
-<form action="userselect.php" method="get">
+    <div class="container">
+    <form action="userselect.php" method="get">
     <?php
       //残金の定義
       $money[0]['money'] = $money[0]['money'] - $product[0]['price'];
 
-      print $product[0]['name'] . "を買いました。";
+      print "Thanks!";
       print '<br>';
-      print $username . "の所持金は" . $money[0]['money'] . "円になりました";
+      print "残高:" . $money[0]['money'] . "円";
       $st = $pdo->query("update user set money = " . $money[0]['money'] . " where name = '" . $username . "';");
 
       print '<input type="hidden" name="money"  value='. $money[0]["money"].' >';
       print '<input type="hidden" name="number" value='.$_GET["number"].' >';
-      print '<br>';
       $after_number = $stock[0]["number"]-1;
-      print  $product[0]['name']. "の在庫は" . $after_number ."個となりました";
       $st = $pdo->query("update stock set number = " . $after_number . " where product_id = '" . $product[0]["id"] . "';");
       ?>
-
-　　<p class="article_link"><a href="toppage.php">トップページに戻る</a></p>
-</form>
-
+　　<p class="article_link mes"><a href="toppage.php" >buy more</a></p>
+    </form>
+  </div>
+  <div id="server-data-provider" data-msg="<?=h($product[0]['id'])?>"></div>
   </body>
+  <script src="//cdn.rawgit.com/cidreixd/webmo-library-javascript/master/dist/webmo.min.js"></script>
+  <script>
+      
+    webmo1 = new Webmo.ws("webmo-cmp25-0.local")
+    webmo2 = new Webmo.ws("webmo-cmp25-1.local")
+    webmo3 = new Webmo.ws("webmo-cmp25-2.local")
+    const server_data = document.querySelector('#server-data-provider').dataset;
+    webmo1.onopen = function () {
+      if (server_data.msg == 1){
+        console.log("rotate")
+          webmo1.rotateBy(60,90)
+          setTimeout(function () {
+            webmo1.rotateBy(-60,90)
+          }, 2000)
+      } else if (server_data.msg == 2){
+        console.log("rotate")
+          webmo1.rotateBy(-60,90)
+          setTimeout(function () {
+            webmo1.rotateBy(60,90)
+          }, 2000)
+      } 
+    }
+    webmo2.onopen = function () {
+      if (server_data.msg == 3){
+        console.log("rotate")
+          webmo2.rotateBy(60,90)
+          setTimeout(function () {
+            webmo2.rotateBy(-60,90)
+          }, 2000)
+      } else if (server_data.msg == 4){
+        console.log("rotate")
+          webmo2.rotateBy(-60,90)
+          setTimeout(function () {
+            webmo2.rotateBy(60,90)
+          }, 2000)
+      } 
+    }
+    webmo3.onopen = function () {
+      if (server_data.msg == 5){
+        console.log("rotate")
+          webmo3.rotateBy(60,90)
+          setTimeout(function () {
+            webmo3.rotateBy(-60,90)
+          }, 2000)
+      } else if (server_data.msg == 6){
+        console.log("rotate")
+          webmo3.rotateBy(-60,90)
+          setTimeout(function () {
+            webmo3.rotateBy(60,90)
+          }, 2000)
+      } 
+    }
+  </script>
 </html>

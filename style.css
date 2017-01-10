@@ -1,0 +1,16 @@
+.container{
+  margin: 8px 16px;
+}
+.mes{
+  color: #777;
+  font-size: 16px;
+  margin: 16px 0px;
+}
+
+.buy{
+  margin: 18px 0px;
+}
+
+table{
+  width: 100%;
+}

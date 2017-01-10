@@ -17,37 +17,40 @@ $money = $st->fetchAll();
 <html lang="ja">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/4.1.0/sanitize.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-pink.min.css">
+    <link rel="stylesheet" href="./style.css">
+    <script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
     <title>Ano-hako-database</title>
-
   </head>
   <body>
-    <h3>商品を選択してください</h3>
-      <?php print $_SESSION['username'] . "の所持金は" . $money[0]['money']. "円です"; ?>
+    <div class="container">
+      <div class="mes"><?php print "残高: " . $money[0]['money']. "円"; ?></div>
       <form action="shopping_submit.php" method="get">
-        <table>
+        <table class="mdl-data-table mdl-js-data-table mdl-shadow--2dp">
           <tr>
-            <th>drink</th>
+            <th class="mdl-data-table__cell--non-numeric">drink</th>
             <th>price</th>
             <th>stock</th>
-            <th>No.</th>
           </tr>
           <?php
           foreach($product as $p) {
             print '<tr>';
-            print '<td><input type="radio" name="productname" value="'. $p["name"] .'">' . $p["name"] . '</th>';
+            print '<td class="mdl-data-table__cell--non-numeric"><input type="radio" name="productname" value="'. $p["name"] .'">' . $p["name"] . '</th>';
             print '<td>' . $p["price"] . '円</th>';
             $st = $pdo->query("select * from stock where id =" .$p["id"] . ";");
             $stock = $st->fetchAll();
             print '<td>'.$stock[0]["number"].'個</td>';
-            print '<td>'.$stock[0]["product_id"].'</td>';
             //print '<input type="hidden" name="number" value='.$stock[0]["number"].' >';
             print '</tr>';
           }
           print '<input type="hidden" name="username" value='.$_GET["username"].' >';
           ?>
        </table>
-       <input type="submit" value="購入">
+       <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect buy" type="submit" value="購入">
      </form>
-     <a href="/logout.php?token=<?=h(generate_token())?>">ログアウト</a>
+  </div>
   </body>
 </html>
