@@ -29,12 +29,14 @@ $stock = $st->fetchAll();
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/10up-sanitize.css/4.1.0/sanitize.min.css">
     <link rel="stylesheet" href="./style.css">
+    <script src="//code.jquery.com/jquery-2.0.0.min.js"></script>
     <title>My Blog - コメント登録</title>
 
   </head>
   <body>
     <div class="container">
-    <form action="userselect.php" method="get">
+    <div class="blossom"></div>
+    <div id="bought">
     <?php
       //残金の定義
       $money[0]['money'] = $money[0]['money'] - $product[0]['price'];
@@ -48,11 +50,13 @@ $stock = $st->fetchAll();
       print '<input type="hidden" name="number" value='.$_GET["number"].' >';
       $after_number = $stock[0]["number"]-1;
       $st = $pdo->query("update stock set number = " . $after_number . " where product_id = '" . $product[0]["id"] . "';");
-      ?>
-　　<p class="article_link mes"><a href="toppage.php" >buy more</a></p>
-    </form>
+?>
+    </div>
+    <div class="blossom"></div>
+　　<div class="article_link"><a href="toppage.php" >buy more</a></div>
   </div>
-  <div id="server-data-provider" data-msg="<?=h($product[0]['id'])?>"></div>
+  <div id="server-id_data-provider" data-msg="<?=h($product[0]['id'])?>"></div>
+  <div id="server-usr_data-provider" data-usr="<?=h($username)?>"></div>
   </body>
   <script src="//cdn.rawgit.com/cidreixd/webmo-library-javascript/master/dist/webmo.min.js"></script>
   <script>
@@ -60,7 +64,7 @@ $stock = $st->fetchAll();
     webmo1 = new Webmo.ws("webmo-cmp25-0.local")
     webmo2 = new Webmo.ws("webmo-cmp25-1.local")
     webmo3 = new Webmo.ws("webmo-cmp25-2.local")
-    const server_data = document.querySelector('#server-data-provider').dataset;
+    const server_data = document.querySelector('#server-id_data-provider').dataset;
     webmo1.onopen = function () {
       if (server_data.msg == 1){
         console.log("rotate")
@@ -106,5 +110,26 @@ $stock = $st->fetchAll();
           }, 2000)
       } 
     }
+
+    const usr_data = document.querySelector('#server-usr_data-provider').dataset;
+    const reqURL = 'https://api.github.com/users/' + usr_data.usr + '/events'
+    const day = new Date();
+    const today = day.getFullYear()+"-"+("0"+(day.getMonth()+1)).slice(-2)+"-"+("0"+day.getDate()).slice(-2)
+    var commits = 0
+    console.log(today);
+    $.getJSON(reqURL)
+    .done(function(data) {
+      $.each(data, function(index, val){
+        if(val.type == "PushEvent" && val.created_at.substr(0, 10) == today){
+          commits += val.payload.commits.length
+        }
+      })
+      console.log(commits)
+      var blossom = ''
+      for(var i=0;i<commits;i++){
+        blossom += "🌸" 
+      }
+      $('.blossom').text(blossom)
+    })
   </script>
 </html>

@@ -52,5 +52,6 @@ $money = $st->fetchAll();
        <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect buy" type="submit" value="購入">
      </form>
   </div>
+  <a href="/logout.php?token=<?=h(generate_token())?>">ログアウト</a>
   </body>
 </html>
