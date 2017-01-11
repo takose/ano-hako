@@ -9,6 +9,9 @@ $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
 // $product = $st->fetchAll();
 
 $Pname = $_GET["productname"];
+if($Pname===""){
+  header('Location: /toppage.php');
+}
 $st = $pdo->query("select * from product where name = '" . $Pname . "';");
 $product = $st->fetchAll();
 //$Pnumber = $stock[0]["number"];
@@ -47,8 +50,6 @@ $stock = $st->fetchAll();
       print "残高:" . $money[0]['money'] . "円";
       $st = $pdo->query("update user set money = " . $money[0]['money'] . " where name = '" . $username . "';");
 
-      print '<input type="hidden" name="money"  value='. $money[0]["money"].' >';
-      print '<input type="hidden" name="number" value='.$_GET["number"].' >';
       $after_number = $stock[0]["number"]-1;
       $st = $pdo->query("update stock set number = " . $after_number . " where product_id = '" . $product[0]["id"] . "';");
 ?>
