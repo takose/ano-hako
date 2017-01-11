@@ -46,7 +46,6 @@ $money = $st->fetchAll();
             //print '<input type="hidden" name="number" value='.$stock[0]["number"].' >';
             print '</tr>';
           }
-          print '<input type="hidden" name="username" value='.$_GET["username"].' >';
           ?>
        </table>
        <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect buy" type="submit" value="buy">
