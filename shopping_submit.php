@@ -54,13 +54,13 @@ if($after_number < 0){
     <div class="container">
     <div class="blossom"></div>
     <div id="bought">
-    </div>
-    <div class="blossom"></div>
     <?php
       print "Thanks!";
-      print '<br>';
+      print '<br><br>';
       print "残高:" . $money[0]['money'] . "円<br>";
     ?>
+    </div>
+    <div class="blossom"></div>
     <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect article_link" type="button" onclick="location.href='toppage.php'"value="buy more">
   </div>
   <div id="server-id_data-provider" data-msg="<?=h($product[0]['id'])?>"></div>
@@ -111,7 +111,7 @@ if($after_number < 0){
     const day = new Date();
     const today = day.getFullYear()+"-"+("0"+(day.getMonth()+1)).slice(-2)+"-"+("0"+day.getDate()).slice(-2)
     var commits = 0
-    console.log(today);
+    //usernameをgithubのidで登録していればその日のコミット数がとってこられる
     $.getJSON(reqURL)
     .done(function(data) {
       $.each(data, function(index, val){
