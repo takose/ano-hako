@@ -44,6 +44,7 @@ header('Content-Type: text/html; charset=UTF-8');
 <body>
   <div class="container">
   <h2>Login</h2>
+  <div>//ユーザ名: takose, パスワード: passtakase でログインして下さい<div>
   <form method="post" action="">
     <input type="text" class="login_form" name="username" placeholder="username" value="">
     <input type="password" class="login_form" name="password" placeholder="password" value="">
@@ -53,7 +54,6 @@ header('Content-Type: text/html; charset=UTF-8');
   <?php if (http_response_code() === 403): ?>
     <p style="color: red;">ユーザ名またはパスワードが違います</p>
   <?php endif; ?>
-  <?php print $pass[0]['password'] ?>
   </div>
 </body>
 </html>
