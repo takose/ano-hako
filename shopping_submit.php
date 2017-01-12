@@ -4,26 +4,39 @@ require_logined_session();
 
 $pdo = new PDO("sqlite:anohako.sqlite");
 $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
-//在庫の表示
-// $st = $pdo->query("select * from product order by id desc");
-// $product = $st->fetchAll();
 
 $Pname = $_GET["productname"];
-if($Pname===""){
+if($Pname==""){
   header('Location: /toppage.php');
 }
-$st = $pdo->query("select * from product where name = '" . $Pname . "';");
+$st = $pdo->prepare('select * from product where name = ?;');
+$st->execute(array($Pname));
 $product = $st->fetchAll();
-//$Pnumber = $stock[0]["number"];
-// $st = $pdo->query("select number from stock where id = '" . $Pid . "';");
-// $number = $st->fetchAll();
 
 $username = $_SESSION['username'];
-$st = $pdo->query("select money from user where name = '" . $username . "';");
+$st = $pdo->prepare('select money from user where name = ?;');
+$st->execute(array($username));
 $money = $st->fetchAll();
 
-$st = $pdo->query("select * from stock where product_id = '" . $product[0]['id'] . "';");
+$st = $pdo->query('select * from stock where product_id = ?;');
+$st->execute(array($product[0]['id']));
 $stock = $st->fetchAll();
+
+$money[0]['money'] = $money[0]['money'] - $product[0]['price'];
+if($money[0]['money'] < 0){
+  header('Location: /toppage.php');
+} else {
+  $st = $pdo->query('update user set money = ? where name = ?;');
+  $st->execute(array($money[0]['money'], $username));
+}
+
+$after_number = $stock[0]["number"]-1;
+if($after_number < 0){
+  header('Location: /toppage.php');
+} else {
+  $st = $pdo->query('update stock set number = ? where product_id = ?;');
+  $st->execute(array($after_number, $product[0]["id"]));
+}
 ?>
 <!DOCTYPE html>
 <html lang="ja">
@@ -41,20 +54,13 @@ $stock = $st->fetchAll();
     <div class="container">
     <div class="blossom"></div>
     <div id="bought">
-    <?php
-      //残金の定義
-      $money[0]['money'] = $money[0]['money'] - $product[0]['price'];
-
-      print "Thanks!";
-      print '<br><br>';
-      print "残高:" . $money[0]['money'] . "円";
-      $st = $pdo->query("update user set money = " . $money[0]['money'] . " where name = '" . $username . "';");
-
-      $after_number = $stock[0]["number"]-1;
-      $st = $pdo->query("update stock set number = " . $after_number . " where product_id = '" . $product[0]["id"] . "';");
-?>
     </div>
     <div class="blossom"></div>
+    <?php
+      print "Thanks!";
+      print '<br>';
+      print "残高:" . $money[0]['money'] . "円<br>";
+    ?>
     <input class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect article_link" type="button" onclick="location.href='toppage.php'"value="buy more">
   </div>
   <div id="server-id_data-provider" data-msg="<?=h($product[0]['id'])?>"></div>
@@ -62,54 +68,41 @@ $stock = $st->fetchAll();
   </body>
   <script src="//cdn.rawgit.com/cidreixd/webmo-library-javascript/master/dist/webmo.min.js"></script>
   <script>
-      
-    webmo1 = new Webmo.ws("webmo-cmp25-0.local")
-    webmo2 = new Webmo.ws("webmo-cmp25-1.local")
-    webmo3 = new Webmo.ws("webmo-cmp25-2.local")
+    webmo1 = new Webmo.ws("192.168.10.4")
+    webmo2 = new Webmo.ws("192.168.10.2")
+    webmo3 = new Webmo.ws("192.168.10.3")
     const server_data = document.querySelector('#server-id_data-provider').dataset;
+    function rotate_to_drop_top(webmo){
+      webmo.rotateBy(60,90)
+      setTimeout(function () {
+        webmo.rotateBy(-60,90)
+      }, 2000)
+    }
+    function rotate_to_drop_bottom(webmo){
+      webmo.rotateBy(-60,90)
+      setTimeout(function () {
+        webmo.rotateBy(60,90)
+      }, 2000)
+    }
     webmo1.onopen = function () {
       if (server_data.msg == 1){
-        console.log("rotate")
-          webmo1.rotateBy(60,90)
-          setTimeout(function () {
-            webmo1.rotateBy(-60,90)
-          }, 2000)
+        rotate_to_drop_top(webmo1)
       } else if (server_data.msg == 2){
-        console.log("rotate")
-          webmo1.rotateBy(-60,90)
-          setTimeout(function () {
-            webmo1.rotateBy(60,90)
-          }, 2000)
+        rotate_to_drop_bottom(webmo1)
       } 
     }
     webmo2.onopen = function () {
       if (server_data.msg == 3){
-        console.log("rotate")
-          webmo2.rotateBy(60,90)
-          setTimeout(function () {
-            webmo2.rotateBy(-60,90)
-          }, 2000)
+        rotate_to_drop_top(webmo2)
       } else if (server_data.msg == 4){
-        console.log("rotate")
-          webmo2.rotateBy(-60,90)
-          setTimeout(function () {
-            webmo2.rotateBy(60,90)
-          }, 2000)
+        rotate_to_drop_bottom(webmo2)
       } 
     }
     webmo3.onopen = function () {
       if (server_data.msg == 5){
-        console.log("rotate")
-          webmo3.rotateBy(60,90)
-          setTimeout(function () {
-            webmo3.rotateBy(-60,90)
-          }, 2000)
+        rotate_to_drop_top(webmo3)
       } else if (server_data.msg == 6){
-        console.log("rotate")
-          webmo3.rotateBy(-60,90)
-          setTimeout(function () {
-            webmo3.rotateBy(60,90)
-          }, 2000)
+        rotate_to_drop_bottom(webmo3)
       } 
     }
 
